@@ -1,0 +1,5 @@
+target/
+.idea/
+spark-warehouse/
+src/main/resources/parquet_output/
+src/main/resources/csv_output/
