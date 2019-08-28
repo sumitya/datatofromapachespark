@@ -1,5 +1,6 @@
 package datatofromapachespark
 
+import datatofromapachespark.databases.nosql.NoSqlReader
 import datatofromapachespark.databases.rdbms.RdbmsReader
 import datatofromapachespark.transformations.RDDTransformations
 import datatofromapachespark.utils.{Contexts, GetAllProperties}
@@ -68,17 +69,12 @@ object DataToFromApacheSparkApp {
     /*
     **(1) Scan JDBCRelation(address) [numPartitions=2] [addressid#0,contactid#1,line1#2,city#3,state#4,zip#5] PushedFilters: [], ReadSchema: struct<addressid:int,contactid:int,line1:string,city:string,state:string,zip:string>
     */
-
     println(jdbcDF.queryExecution.executedPlan)
 
-    /*
-    * Below produces output like: Relation[addressid#0,contactid#1,line1#2,city#3,state#4,zip#5] JDBCRelation(address) [numPartitions=2]
-    */
+    // Below produces output like: Relation[addressid#0,contactid#1,line1#2,city#3,state#4,zip#5] JDBCRelation(address) [numPartitions=2]
     println(jdbcDF.queryExecution.optimizedPlan)
 
-   /*
-   * Below few print stmts gives metadata information about jdbcDF [[DataFrame]]
-   */
+   // Below few print stmts gives metadata information about jdbcDF [[DataFrame]]
     println(jdbcDF.queryExecution.sparkPlan)
 
     println(jdbcDF.queryExecution.analyzed)
@@ -90,6 +86,12 @@ object DataToFromApacheSparkApp {
     println(jdbcDF.queryExecution.stringWithStats)
 
     println(jdbcDF.queryExecution.debug.codegen())
+
+    //read from NoSql DB i.e. DynamoDB database.
+
+    val dynamoDBDataFrame  = NoSqlReader.readFromDynamoDB(spark)
+
+    dynamoDBDataFrame.show()
 
     //stop the sparkSession
     Contexts.stopContext

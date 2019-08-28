@@ -18,4 +18,11 @@ package object databases {
   private[databases] val UPPERBOUND = allProperties getOrElse("UPPERBOUND","#")
   private[databases] val FETCHSIZE = allProperties getOrElse("FETCHSIZE","#")
 
+  private[databases] val AWSREGION = allProperties getOrElse("AWS_REGION","#")
+  private[databases] val DYNAMODBTABLE = allProperties getOrElse("DYNAMODBTABLE","#")
+  private[databases] val  BYTESPERRCU = allProperties getOrElse("BYTESPERRCU","#")
+  private[databases] val  TARGETCAPACITY = allProperties getOrElse("TARGETCAPACITY","#")
+  private[databases] val  STRONGLYCONSISTENTREADS = allProperties getOrElse("STRONGLYCONSISTENTREADS","#")
+  private[databases] val  NOOFPARITIIONS = allProperties getOrElse("NOOFPARITIIONS","#")
+
 }

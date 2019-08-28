@@ -1,6 +1,6 @@
 package datatofromapachespark.databases.nosql
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrameReader, SparkSession}
 
 object NoSqlReader {
 
@@ -11,6 +11,19 @@ object NoSqlReader {
     * 3. scan operation.
     * 4. item operations
     */
+
+    //reader reads the data from the DefaultSource
+
+    import datatofromapachespark.databases._
+
+    val reader = spark.
+        read.
+       format("databases.nosql.dynamodb")
+      .option("tableName", DYNAMODBTABLE)
+      .option("readPartitions",NOOFPARITIIONS.toInt)
+      .load()
+
+    reader
 
   }
 

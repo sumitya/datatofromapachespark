@@ -8,7 +8,7 @@ object Contexts {
   val SPARK:SparkSession = SparkSession
     .builder
     .appName("DataToFromApacheSpark")
-    .master("local[4]")
+    .master("local")
     .getOrCreate()
 
   // SQL_CONTEXT is created as soon as it is declared here.

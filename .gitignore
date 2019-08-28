@@ -3,3 +3,4 @@ target/
 spark-warehouse/
 src/main/resources/parquet_output/
 src/main/resources/csv_output/
+src/main/resources/ddb_output/
