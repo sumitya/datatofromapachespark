@@ -1,12 +1,11 @@
 package datatofromapachespark.transformations
 
-import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
-import org.apache.spark.sql.{DataFrame, SQLContext, SparkSession}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object RDDTransformations {
 
 
-  def showRecordsPerPartition(df:DataFrame,spark:SparkSession):Unit = {
+  def showRecordsPerPartitionMysql(df:DataFrame,spark:SparkSession):Unit = {
 
     val partitionsRDD = df.rdd.mapPartitionsWithIndex{
 
@@ -25,5 +24,21 @@ object RDDTransformations {
     partitionsRDD.toDF().show(100)
 
 }
+
+  def getCountByKeyDynamoDB(df:DataFrame,spark:SparkSession) = {
+
+
+    /*val table = DynamoDBClient.getDynamoDB(AWSREGION).getTable(tableName)
+    val desc = table.describe()
+
+    new TableDescription().getKeySchema
+
+    // Key schema.
+    val keySchema = TableKeys.fromDescription(desc.getKeySchema.asScala)
+    */
+
+
+
+  }
 
 }

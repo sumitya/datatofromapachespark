@@ -46,16 +46,16 @@ object DataToFromApacheSparkApp {
     var csvOutputPath = GetAllProperties.readPropertyFile get "CSV_OUTPUT_PATH" getOrElse("#") replace("<USER_NAME>",userName)
 
     val spark = Contexts.SPARK
-
+/*
     val jdbcDF = new RdbmsReader().readFromMySql(spark)
 
     //Get no. of records per partition
-    RDDTransformations.showRecordsPerPartition(jdbcDF,spark)
+    RDDTransformations.showRecordsPerPartitionMysql(jdbcDF,spark)
 
     //If partitionColumn is not a primary key. Repartition the data because of unbalance in partition.
     val jdbcDFRepartitioned = jdbcDF.repartition(10)
 
-    RDDTransformations.showRecordsPerPartition(jdbcDFRepartitioned,spark)
+    RDDTransformations.showRecordsPerPartitionMysql(jdbcDFRepartitioned,spark)
 
     jdbcDF.createOrReplaceTempView("ADDRESS")
 
@@ -89,9 +89,12 @@ object DataToFromApacheSparkApp {
 
     //read from NoSql DB i.e. DynamoDB database.
 
+    */
     val dynamoDBDataFrame  = NoSqlReader.readFromDynamoDB(spark)
 
     dynamoDBDataFrame.show()
+
+    RDDTransformations.getCountByKeyDynamoDB(dynamoDBDataFrame,spark)
 
     //stop the sparkSession
     Contexts.stopContext

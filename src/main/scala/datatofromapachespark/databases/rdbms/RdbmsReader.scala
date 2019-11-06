@@ -40,6 +40,11 @@ class RdbmsReader {
 
   }
 
-  def readFromRedShift(spark: SparkSession) = {}
+  def readFromRedShift(spark: SparkSession) = {
+
+
+
+    
+  }
 
 }

@@ -6,6 +6,7 @@ import org.apache.spark.sql.{Row, SQLContext}
 import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types._
 import datatofromapachespark.databases.nosql.dynamodb.operations.DynamoDBTable
+import datatofromapachespark.utils.Contexts
 
 import scala.collection.JavaConverters._
 
@@ -16,24 +17,25 @@ class DynamoDBRelation(parameters: Map[String, String],val sqlContext: SQLContex
 
   val numPartitions:Int = parameters.get("readPartitions").map(_.toInt).getOrElse(sqlContext.sparkContext.defaultParallelism)
 
+  val schema: StructType = interSchemaFromTable
+
   override def buildScan(): RDD[Row] = {
 
-    new DynamoDBRDD(sqlContext.sparkContext,(0 until numPartitions).map(index => new ScanPartition(index,tableName)),tableName:String,numPartitions)
+    new DynamoDBRDD(sqlContext.sparkContext,schema,(0 until numPartitions).map(index => new ScanPartition(index,tableName)),tableName:String,numPartitions)
 
   }
-
-  val schema: StructType = interSchemaFromTable
 
   private def interSchemaFromTable:StructType = {
 
     val itemSelectable = new DynamoDBTable(0,tableName).scan(numPartitions).firstPage().getLowLevelResult.getItems.asScala
 
-    val typeMapping = itemSelectable.foldLeft(Map[String, DataType]())({
-      case (map, item) => map ++ item.asMap().asScala.mapValues(inferType)
-    })
-    val typeSeq = typeMapping.map({ case (name, sparkType) => StructField(name, sparkType) }).toSeq
+    val jsonSchema = itemSelectable.map(_.toJSON)
 
-    StructType(typeSeq)
+    val jsonDS = Contexts.SQL_CONTEXT.sparkContext.parallelize(jsonSchema)
+
+    val jsonDF = Contexts.SQL_CONTEXT.read.json(jsonDS)
+
+    jsonDF.schema
 
   }
 

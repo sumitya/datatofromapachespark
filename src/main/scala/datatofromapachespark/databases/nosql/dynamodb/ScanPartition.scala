@@ -44,6 +44,9 @@ class ScanPartition(partitionIndex:Int,tableName:String,requiredColumns: Seq[Str
   override def index: Int = partitionIndex
 
   def covertDDBItemToRow(item:Item):Row = {
+    println(item)
+    println("======================================================")
+    //println(Row.fromSeq(item.asMap().asScala.values.toSeq))
     Row.fromSeq(item.asMap().asScala.values.toSeq)
   }
 }
