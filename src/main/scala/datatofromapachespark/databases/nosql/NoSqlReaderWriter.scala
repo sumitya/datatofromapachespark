@@ -2,7 +2,7 @@ package datatofromapachespark.databases.nosql
 
 import org.apache.spark.sql.{DataFrameReader, SparkSession}
 
-object NoSqlReader {
+object NoSqlReaderWriter {
 
   def readFromDynamoDB(spark: SparkSession) ={
 
@@ -30,6 +30,14 @@ object NoSqlReader {
   def readFromCassandra(spark: SparkSession)={
     //TODO: read according to the partitions
 
+    spark.conf.set("spark.cassandra.connection.host", "localhost")
+
+    import com.datastax.spark.connector._
+
+    val data = spark.sparkContext.cassandraTable("test","emp")
+
+    data.map(row => row.getInt("emp_id")).stats()
+
   }
 
   def readFromHbase(): Unit ={
@@ -38,6 +46,20 @@ object NoSqlReader {
   }
   def readfromMongoDB(): Unit ={
     //TODO: read according to the keys
+
+  }
+
+
+  def writeToCassandra(spark: SparkSession) = {
+
+    spark.conf.set("spark.cassandra.connection.host", "localhost")
+
+    import com.datastax.spark.connector._
+
+    //@TODO: write custom output
+    val rdd = spark.sparkContext.parallelize(List(Seq("moremagic", 1)))
+    rdd.saveToCassandra("test" , "emp", SomeColumns("key", "value"))
+    println("Written to cassandra!!!")
 
   }
 

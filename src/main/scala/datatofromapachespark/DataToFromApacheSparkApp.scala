@@ -1,6 +1,6 @@
 package datatofromapachespark
 
-import datatofromapachespark.databases.nosql.NoSqlReader
+import datatofromapachespark.databases.nosql.NoSqlReaderWriter
 import datatofromapachespark.databases.rdbms.RdbmsReader
 import datatofromapachespark.transformations.RDDTransformations
 import datatofromapachespark.utils.{Contexts, GetAllProperties}
@@ -89,12 +89,20 @@ object DataToFromApacheSparkApp {
 
     //read from NoSql DB i.e. DynamoDB database.
 
-    */
+
     val dynamoDBDataFrame  = NoSqlReader.readFromDynamoDB(spark)
 
     dynamoDBDataFrame.show()
 
     RDDTransformations.getCountByKeyDynamoDB(dynamoDBDataFrame,spark)
+
+    */
+
+    NoSqlReaderWriter.readFromCassandra(spark)
+
+    NoSqlReaderWriter.writeToCassandra(spark)
+
+    Thread.sleep(1000000)
 
     //stop the sparkSession
     Contexts.stopContext
